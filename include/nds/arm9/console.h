@@ -35,8 +35,6 @@ Provides stdio integration for printing to the DS screen as well as debug print
 functionality provided by stderr.
 
 General usage is to initialize the console by:
-consoleDemoInit()
-or to customize the console usage by:
 consoleInit()
 
 The default instance utilizes the sub display, approximatly 15KiB of vram C starting
@@ -218,14 +216,6 @@ PrintConsole *consoleSelect(PrintConsole* console);
 	\return A pointer to the current console.
 */
 PrintConsole* consoleInit(PrintConsole* console, int layer, BgType type, BgSize size, int mapBase, int tileBase, bool mainDisplay, bool loadGraphics);
-
-/*!	\brief Initialize the console to a default state for prototyping.
-	This function sets the console to use sub display, VRAM_C, and BG0 and enables MODE_0_2D on the
-	sub display.  It is intended for use in prototyping applications which need print ability and not actual
-	game use.  Print functionality can be utilized with just this call.
-	\return A pointer to the current PrintConsole.
-*/
-PrintConsole* consoleDemoInit(void);
 
 //! Clears the screan by using iprintf("\x1b[2J");
 void consoleClear(void);

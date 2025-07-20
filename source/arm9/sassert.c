@@ -35,8 +35,6 @@ void __sassert(const char *fileName, int lineNumber, const char* conditionString
 {
     va_list ap;
 
-    consoleDemoInit();
-
     iprintf("\x1b[j"               /* clear screen */
             "\x1b[42mAssertion!\n" /* print in green? */
             "\x1b[39mFile: \n"     /* print in default color */

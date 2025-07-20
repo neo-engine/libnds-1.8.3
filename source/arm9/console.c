@@ -30,7 +30,6 @@ distribution.
 #include <nds/arm9/video.h>
 #include <nds/arm9/background.h>
 #include <nds/debug.h>
-#include <default_font_bin.h>
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -41,7 +40,7 @@ PrintConsole defaultConsole =
 {
 	//Font:
 	{
-		(u16*)default_font_bin, //font gfx
+		0, //font gfx
 		0, //font palette
 		0, //font color count
 		4, //bpp
@@ -74,8 +73,6 @@ PrintConsole defaultConsole =
 PrintConsole currentCopy;
 
 PrintConsole* currentConsole = &currentCopy;
-
-PrintConsole* consoleGetDefault(void){return &defaultConsole;}
 
 void consolePrintChar(char c);
 
@@ -559,17 +556,6 @@ void consoleDebugInit(DebugDevice device){
 	}
 	setvbuf(stderr, NULL , buffertype, 0);
 
-}
-
-//---------------------------------------------------------------------------------
-// Places the console in a default mode using bg0 of the sub display, and vram c for
-// font and map..this is provided for rapid prototyping and nothing more
-PrintConsole* consoleDemoInit(void) {
-//---------------------------------------------------------------------------------
-	videoSetModeSub(MODE_0_2D);
-	vramSetBankC(VRAM_C_SUB_BG);
-
-	return consoleInit(NULL, defaultConsole.bgLayer, BgType_Text4bpp, BgSize_T_256x256, defaultConsole.mapBase, defaultConsole.gfxBase, false, true);
 }
 
 //---------------------------------------------------------------------------------

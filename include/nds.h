@@ -122,7 +122,7 @@
 	\example Graphics/Backgrounds/256_color_bmp/source/main.cpp
 	\example Graphics/Backgrounds/Double_Buffer/source/main.cpp
 	\example Graphics/Backgrounds/rotation/source/main.cpp
-	
+
     <!-- sprites -->
     \example Graphics/Sprites/allocation_test/source/main.c
 	\example Graphics/Sprites/animate_simple/source/template.c
@@ -131,7 +131,7 @@
 	\example Graphics/Sprites/simple/source/template.c
 	\example Graphics/Sprites/sprite_extended_palettes/source/template.c
 	\example Graphics/Sprites/sprite_rotate/source/template.c
-	
+
 	<!-- Graphics Effects -->
 	\example Graphics/Effects/windows/source/template.c
 
@@ -167,17 +167,17 @@
 	\example Graphics/3D/Picking/source/main.cpp
 	\example Graphics/3D/Simple_Quad/source/main.cpp
 	\example Graphics/3D/Simple_Tri/source/main.cpp
-	\example Graphics/3D/Textured_Cube/source/main.cpp	
+	\example Graphics/3D/Textured_Cube/source/main.cpp
 	\example Graphics/3D/Textured_Quad/source/main.cpp
-	\example Graphics/3D/Toon_Shading/source/main.cpp	
-	
+	\example Graphics/3D/Toon_Shading/source/main.cpp
+
 	<!-- RTC -->
 	\example time/RealTimeClock/source/main.c
-	
+
 	<!-- Timers -->
 	\example time/stopwatch/source/main.c
 	\example time/timercallback/source/main.c
-	
+
 
 	<!-- capture -->
 	\example capture/ScreenShot/source/main.cpp
@@ -261,15 +261,10 @@ extern "C" {
 #include "nds/arm9/console.h"
 #include "nds/arm9/decompress.h"
 #include "nds/arm9/exceptions.h"
-#include "nds/arm9/guitarGrip.h"
 #include "nds/arm9/image.h"
 #include "nds/arm9/input.h"
-#include "nds/arm9/keyboard.h"
 #include "nds/arm9/math.h"
-#include "nds/arm9/paddle.h"
 #include "nds/arm9/pcx.h"
-#include "nds/arm9/piano.h"
-#include "nds/arm9/rumble.h"
 #include "nds/arm9/sassert.h"
 #include "nds/arm9/sound.h"
 #include "nds/arm9/sprite.h"
