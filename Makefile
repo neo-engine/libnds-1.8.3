@@ -1,13 +1,8 @@
-ifeq ($(strip $(DEVKITPRO)),)
-$(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>devkitPro)
-endif
-
 export TOPDIR	:=	$(CURDIR)
 
 export LIBNDS_MAJOR	:= 1
 export LIBNDS_MINOR	:= 8
-export LIBNDS_PATCH	:= 0
-
+export LIBNDS_PATCH	:= 3
 
 VERSION	:=	$(LIBNDS_MAJOR).$(LIBNDS_MINOR).$(LIBNDS_PATCH)
 
@@ -39,24 +34,6 @@ clean:
 	@$(MAKE) -C arm9 clean
 	@$(MAKE) -C arm7 clean
 
-#-------------------------------------------------------------------------------
-dist-src:
-#-------------------------------------------------------------------------------
-	@tar --exclude=*CVS* --exclude=.svn -cjf libnds-src-$(VERSION).tar.bz2 arm7/Makefile arm9/Makefile source include icon.bmp Makefile libnds_license.txt Doxyfile
-
-#-------------------------------------------------------------------------------
-dist-bin: all
-#-------------------------------------------------------------------------------
-	@tar --exclude=*CVS* --exclude=.svn -cjf libnds-$(VERSION).tar.bz2 include lib icon.bmp libnds_license.txt
-
-dist: dist-bin dist-src
-
-#-------------------------------------------------------------------------------
-install: dist-bin
-#-------------------------------------------------------------------------------
-	mkdir -p $(DESTDIR)$(DEVKITPRO)/libnds
-	bzip2 -cd libnds-$(VERSION).tar.bz2 | tar -xf - -C $(DESTDIR)$(DEVKITPRO)/libnds
-
 #---------------------------------------------------------------------------------
 docs:
 #---------------------------------------------------------------------------------
@@ -76,5 +53,4 @@ include/nds/libversion.h : Makefile
 	@echo '#define _LIBNDS_STRING "libNDS Release '$(LIBNDS_MAJOR).$(LIBNDS_MINOR).$(LIBNDS_PATCH)'"' >> $@
 	@echo >> $@
 	@echo "#endif // __LIBNDSVERSION_H__" >> $@
-
 
