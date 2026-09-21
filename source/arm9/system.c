@@ -28,111 +28,108 @@ distribution.
 
 
 ---------------------------------------------------------------------------------*/
-
 #include <nds/memory.h>
+
 #include <nds/bios.h>
 #include <nds/system.h>
+
 #include <nds/fifocommon.h>
 #include <nds/interrupts.h>
-#include <nds/fifomessages.h>
-#include <libnds_internal.h>
 
-//todo document
+#include <nds/fifomessages.h>
+#include <nds/transfer.h>
+
+// todo document
 //
 
-static void(*SDcallback)(int)=NULL;
+static void ( *SDcallback )( int ) = NULL;
 
 //---------------------------------------------------------------------------------
-void setSDcallback(void(*callback)(int)) {
-//---------------------------------------------------------------------------------
-	SDcallback = callback;
+void setSDcallback( void ( *callback )( int ) ) {
+    //---------------------------------------------------------------------------------
+    SDcallback = callback;
 }
 
 //---------------------------------------------------------------------------------
 // Handle system requests from the arm7
 //---------------------------------------------------------------------------------
-void systemValueHandler(u32 value, void* data){
-//---------------------------------------------------------------------------------
-	switch(value) {
-	case PM_REQ_SLEEP:
-		systemSleep();
-		break;
-	case SDMMC_INSERT:
-		if(SDcallback) SDcallback(1);
-		break;
-	case SDMMC_REMOVE:
-		if(SDcallback) SDcallback(0);
-		break;
-	}
+void systemValueHandler( u32 value, void* data ) {
+    //---------------------------------------------------------------------------------
+    switch( value ) {
+    case PM_REQ_SLEEP: systemSleep( ); break;
+    case SDMMC_INSERT:
+        if( SDcallback ) SDcallback( 1 );
+        break;
+    case SDMMC_REMOVE:
+        if( SDcallback ) SDcallback( 0 );
+        break;
+    }
 }
 
 //---------------------------------------------------------------------------------
-void systemMsgHandler(int bytes, void* user_data){
-//---------------------------------------------------------------------------------
-	FifoMessage msg;
+void systemMsgHandler( int bytes, void* user_data ) {
+    //---------------------------------------------------------------------------------
+    FifoMessage msg;
 
-	fifoGetDatamsg(FIFO_SYSTEM, bytes, (u8*)&msg);
+    fifoGetDatamsg( FIFO_SYSTEM, bytes, (u8*) &msg );
 
-	switch (msg.type) {
-	case SYS_INPUT_MESSAGE:
-		setTransferInputData(&(msg.SystemInput.touch), msg.SystemInput.keys);
-		break;
-	}
+    switch( msg.type ) {
+    case SYS_INPUT_MESSAGE:
+        setTransferInputData( &( msg.SystemInput.touch ), msg.SystemInput.keys );
+        break;
+    }
 }
 
 //---------------------------------------------------------------------------------
-void systemSleep(void) {
-//---------------------------------------------------------------------------------
-   fifoSendValue32(FIFO_PM, PM_REQ_SLEEP);
-  
-   //100ms
-   swiDelay(419000);
-}
+void systemSleep( void ) {
+    //---------------------------------------------------------------------------------
+    fifoSendValue32( FIFO_PM, PM_REQ_SLEEP );
 
-
-//---------------------------------------------------------------------------------
-void powerOn(int bits) {
-//---------------------------------------------------------------------------------
-	if(bits & BIT(16))
-		REG_POWERCNT |= bits & 0xFFFF;
-	else
-		fifoSendValue32(FIFO_PM, PM_REQ_ON | (bits & 0xFFFF));
+    // 100ms
+    swiDelay( 419000 );
 }
 
 //---------------------------------------------------------------------------------
-void powerOff(int bits) {
-	if(bits & BIT(16))
-		REG_POWERCNT &= ~(bits & 0xFFFF);
-	else
-		fifoSendValue32(FIFO_PM, PM_REQ_OFF | (bits & 0xFFFF));
+void powerOn( int bits ) {
+    //---------------------------------------------------------------------------------
+    if( bits & BIT( 16 ) )
+        REG_POWERCNT |= bits & 0xFFFF;
+    else
+        fifoSendValue32( FIFO_PM, PM_REQ_ON | ( bits & 0xFFFF ) );
 }
 
 //---------------------------------------------------------------------------------
-void ledBlink(int bm) {
-//---------------------------------------------------------------------------------
-	fifoSendValue32(FIFO_PM, PM_REQ_LED | bm);
+void powerOff( int bits ) {
+    if( bits & BIT( 16 ) )
+        REG_POWERCNT &= ~( bits & 0xFFFF );
+    else
+        fifoSendValue32( FIFO_PM, PM_REQ_OFF | ( bits & 0xFFFF ) );
 }
 
 //---------------------------------------------------------------------------------
-u32 getBatteryLevel() {
-//---------------------------------------------------------------------------------
-	fifoSendValue32(FIFO_PM, PM_REQ_BATTERY);
-	while(!fifoCheckValue32(FIFO_PM)); //swiIntrWait(1,IRQ_FIFO_NOT_EMPTY);
-	return fifoGetValue32(FIFO_PM);
+void ledBlink( int bm ) {
+    //---------------------------------------------------------------------------------
+    fifoSendValue32( FIFO_PM, PM_REQ_LED | bm );
 }
 
 //---------------------------------------------------------------------------------
-void enableSlot1() {
-//---------------------------------------------------------------------------------
-
-	if(isDSiMode()) fifoSendValue32(FIFO_PM, PM_REQ_SLOT1_ENABLE);
-
+u32 getBatteryLevel( ) {
+    //---------------------------------------------------------------------------------
+    fifoSendValue32( FIFO_PM, PM_REQ_BATTERY );
+    while( !fifoCheckValue32( FIFO_PM ) ); // swiIntrWait(1,IRQ_FIFO_NOT_EMPTY);
+    return fifoGetValue32( FIFO_PM );
 }
 
 //---------------------------------------------------------------------------------
-void disableSlot1() {
+void enableSlot1( ) {
+    //---------------------------------------------------------------------------------
+
+    if( isDSiMode( ) ) fifoSendValue32( FIFO_PM, PM_REQ_SLOT1_ENABLE );
+}
+
 //---------------------------------------------------------------------------------
+void disableSlot1( ) {
+    //---------------------------------------------------------------------------------
 
-	if(isDSiMode()) fifoSendValue32(FIFO_PM, PM_REQ_SLOT1_DISABLE);
-
+    if( isDSiMode( ) ) fifoSendValue32( FIFO_PM, PM_REQ_SLOT1_DISABLE );
 }

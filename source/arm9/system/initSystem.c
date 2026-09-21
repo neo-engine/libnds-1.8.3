@@ -37,7 +37,7 @@ distribution.
 #include <nds/interrupts.h>
 #include <nds/fifocommon.h>
 #include <time.h>
-#include <libnds_internal.h>
+#include <nds/transfer.h>
 
 #include <sys/iosupport.h>
 #include <sys/time.h>
